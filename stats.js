@@ -102,15 +102,16 @@ function generateReport(interval) // 0 = Day, 1 = Week, 2 = Month
                         prettyTime(data.prevent), data.returns, prettyTime(data.support));
             }
 
-            var d = new Date();
-            var fileName = "/tmp/" + getFlairName(interval) + "-" + d.yyyymmdd();
-            fs.writeFile(fileName, fileText, function (err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("The file was saved! - " + fileName);
-                }
-            });
+            //commented out, no data storage on heroku
+            // var d = new Date();
+            // var fileName = "/tmp/" + getFlairName(interval) + "-" + d.yyyymmdd();
+            // fs.writeFile(fileName, fileText, function (err) {
+            //     if (err) {
+            //         console.log(err);
+            //     } else {
+            //         console.log("The file was saved! - " + fileName);
+            //     }
+            // });
             postTextToReddit(interval, fileText);
         });
     });
