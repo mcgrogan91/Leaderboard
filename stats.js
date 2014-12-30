@@ -248,18 +248,18 @@ function sanatizeName(name)
     return "`"+name+"`";
 }
 
-var daily = new CronJob('00 59 14 * * *', function () {
-    //Runs every day at 2:55 PM
+var daily = new CronJob('10 59 14 * * *', function () {
+    //Runs every day at 2:59 PM
     var text = generateReport(FlairEnum.DAILY);
 });
 
-var weekly = new CronJob('00 59 14 * * 0', function () {
-    //Runs every Sunday at 2:56 PM
+var weekly = new CronJob('25 59 14 * * 0', function () {
+    //Runs every Sunday at 2:59 PM
     var text = generateReport(FlairEnum.WEEKLY);
 });
 
-var monthly = new CronJob('00 59 14 1 * *', function () {
-    //Runs every day at 2:54 PM
+var monthly = new CronJob('40 59 14 1 * *', function () {
+    //Runs the first of every month at 2:59 PM
     var text = generateReport(FlairEnum.MONTHLY);
 });
 
