@@ -3,11 +3,16 @@
   "version": "0.0.1",
   "description": "A tool for generating stats of Daily/Weekly/Monthly Leaderboards",
   "author": "bizkut",
+  "repository":"https://github.com/mcgrogan91/TagPro-Leaderboard",
   "dependencies": {
     "cron": "1.0.5",
     "jquery": "2.1.3",
     "jsdom": "2.0.0",
     "nodewhal": "git://github.com/go1dfish/nodewhal",
     "request": "2.51.0"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "2.1.x"
   }
 }
