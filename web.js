@@ -6,7 +6,7 @@ var server = http.createServer(function(req, res) {
     res.end();
 });
  
-var port = 10001;
-server.listen(port, function() {
+var port = 5000;
+server.listen(process.env.PORT || port, function() {
     console.log('server listening on port ' + port);
 });
