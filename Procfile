@@ -1,1 +1,1 @@
-worker:node stats.js
+worker: node stats.js
