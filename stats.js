@@ -265,3 +265,4 @@ var monthly = new CronJob('00 54 14 1 * *', function () {
 daily.start();
 weekly.start();
 monthly.start();
+console.log("Crons started");
