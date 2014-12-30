@@ -2,7 +2,6 @@ var request = require("request");
 var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
 var fs = require('fs');
 var CronJob = require('cron').CronJob;
-var config = require('./config');
 var nodewhal = require('nodewhal');
 var FlairEnum = Object.freeze({DAILY: 0, WEEKLY: 1, MONTHLY: 2});
 
@@ -266,5 +265,3 @@ var monthly = new CronJob('00 54 14 1 * *', function () {
 daily.start();
 weekly.start();
 monthly.start();
-
-//console.log("username: "+config.password);
