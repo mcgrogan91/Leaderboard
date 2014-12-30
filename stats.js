@@ -2,6 +2,8 @@ var request = require("request");
 var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
 var fs = require('fs');
 var CronJob = require('cron').CronJob;
+var config = require('./config');
+var nodewhal = require('nodewhal');
 var FlairEnum = Object.freeze({DAILY: 0, WEEKLY: 1, MONTHLY: 2});
 
 //Prototype changes.
@@ -65,7 +67,6 @@ function generateReport(interval) // 0 = Day, 1 = Week, 2 = Month
             for (i = 1; i <= 100; i++)
             {
                 var player = searchForStats(stats, out[i].id, 0, 99)
-                console.log(out[i].id);
                 out[i].daily = player.stats.today;
                 out[i].weekly = player.stats.week;
                 out[i].monthly = player.stats.month;
@@ -111,7 +112,25 @@ function generateReport(interval) // 0 = Day, 1 = Week, 2 = Month
                     console.log("The file was saved! - " + fileName);
                 }
             });
+            postTextToReddit(interval, fileText);
         });
+    });
+}
+
+function postTextToReddit(type, text)
+{
+    var title = getFlairName(type)+" Leaderboard Log/Statistics for "+new Date().yyyymmdd();
+    // console.log("Title:",title);
+    // console.log("Text:",text)
+    nodewhal('bizkut-leaderboard-post').login(process.env.USERNAME, process.env.PASSWORD).then(function(userLogin) {
+        return userLogin.submit('Tagpro', 'self',
+            title,
+            text
+        )
+    }).then(function(newSubmission) {
+        console.log("Posted to", newSubmission.url);
+    }, function(error) {
+        console.error("There was a problem", error);
     });
 }
 
@@ -207,34 +226,45 @@ function makeName(type, player)
     var name = "";
     if (player.rank <= 3)
     {
-        name = "[](#flair-" + getFlairName(type) + ")[**" + player.name + "**](http://tagpro-pi.koalabeast.com/profile/" + player.id + ")";
+        name = "[](#flair-" + getFlairName(type) + ")[" + sanatizeName(player.name) + "](http://tagpro-pi.koalabeast.com/profile/" + player.id + ")";
     }
     else if (player.rank <= 10)
     {
-        name = "[" + player.name + "](http://tagpro-pi.koalabeast.com/profile/" + player.id + ")";
+        name = "[" + sanatizeName(player.name) + "](http://tagpro-pi.koalabeast.com/profile/" + player.id + ")";
     }
     else
     {
-        name = player.name;
+        name = sanatizeName(player.name);
     }
     return name;
 }
 
+function sanatizeName(name)
+{
+    while(name.indexOf('|') > -1)
+    {
+        name.replace('|','');
+    }
+    return "`"+name+"`";
+}
+
 var daily = new CronJob('00 55 14 * * *', function () {
     //Runs every day at 2:55 PM
-    generateReport(FlairEnum.DAILY);
+    var text = generateReport(FlairEnum.DAILY);
 });
 
 var weekly = new CronJob('00 56 14 * * 0', function () {
     //Runs every Sunday at 2:56 PM
-    generateReport(FlairEnum.WEEKLY);
+    var text = generateReport(FlairEnum.WEEKLY);
 });
 
 var monthly = new CronJob('00 54 14 1 * *', function () {
     //Runs every day at 2:54 PM
-    generateReport(FlairEnum.MONTHLY);
+    var text = generateReport(FlairEnum.MONTHLY);
 });
 
 daily.start();
 weekly.start();
 monthly.start();
+
+//console.log("username: "+config.password);
