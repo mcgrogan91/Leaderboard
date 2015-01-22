@@ -4,7 +4,7 @@ var fs = require('fs');
 var CronJob = require('cron').CronJob;
 var nodewhal = require('nodewhal');
 var FlairEnum = Object.freeze({DAILY: 0, WEEKLY: 1, MONTHLY: 2});
-var AWS = require('aws-sdk');
+//var AWS = require('aws-sdk');
 
 //Prototype changes.
 if (!String.prototype.format) {
@@ -113,18 +113,18 @@ function generateReport(interval) // 0 = Day, 1 = Week, 2 = Month
             //         console.log("The file was saved! - " + fileName);
             //     }
             // });
-            AWS.config.update({region: 'us-east-1'});
-            var s3bucket = new AWS.S3({params: {Bucket: 'tagprostatsheet'}});
-            s3bucket.createBucket(function() {
-              var params = {Key: 'myKey', Body: fileText};
-              s3bucket.upload(params, function(err, data) {
-                if (err) {
-                  console.log("Error uploading data: ", err);
-                } else {
-                  console.log("Successfully uploaded data to myBucket/myKey");
-                }
-              });
-            });
+            // AWS.config.update({region: 'us-east-1'});
+            // var s3bucket = new AWS.S3({params: {Bucket: 'tagprostatsheet'}});
+            // s3bucket.createBucket(function() {
+            //   var params = {Key: 'myKey', Body: fileText};
+            //   s3bucket.upload(params, function(err, data) {
+            //     if (err) {
+            //       console.log("Error uploading data: ", err);
+            //     } else {
+            //       console.log("Successfully uploaded data to myBucket/myKey");
+            //     }
+            //   });
+            // });
             //postTextToReddit(interval, fileText);
         });
     });
