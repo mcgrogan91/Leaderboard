@@ -99,7 +99,7 @@ function generateReport(interval) // 0 = Day, 1 = Week, 2 = Month
                 fileText += "|{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}|{16}\n".format(i, makeName(interval, out[i]), out[i].points, prettyTime(data.timePlayed), data.win,
                         data.lose, data.games, Math.round(data.percent) + "%", data.tags, data.pops,
                         data.grabs, data.drops, prettyTime(data.hold), data.captures,
-                        prettyTime(data.prevent), data.returns, prettyTime(data.support));
+                        prettyTime(data.prevent), data.returns, data.support);
             }
 
             //commented out, no data storage on heroku
@@ -248,18 +248,18 @@ function sanatizeName(name)
     return "`"+name+"`";
 }
 
-var daily = new CronJob('10 59 14 * * *', function () {
-    //Runs every day at 2:59 PM
+var daily = new CronJob('10 59 19 * * *', function () {
+    //Runs every day at 7:59 PM
     var text = generateReport(FlairEnum.DAILY);
 });
 
-var weekly = new CronJob('25 59 14 * * 0', function () {
-    //Runs every Sunday at 2:59 PM
+var weekly = new CronJob('25 59 19 * * 0', function () {
+    //Runs every Sunday at 7:59 PM
     var text = generateReport(FlairEnum.WEEKLY);
 });
 
-var monthly = new CronJob('40 59 14 1 * *', function () {
-    //Runs the first of every month at 2:59 PM
+var monthly = new CronJob('40 59 19 1 * *', function () {
+    //Runs the first of every month at 7:59 PM
     var text = generateReport(FlairEnum.MONTHLY);
 });
 
