@@ -4,6 +4,7 @@ var fs = require('fs');
 var CronJob = require('cron').CronJob;
 var nodewhal = require('nodewhal');
 var FlairEnum = Object.freeze({DAILY: 0, WEEKLY: 1, MONTHLY: 2});
+//var AWS = require('aws-sdk');
 
 //Prototype changes.
 if (!String.prototype.format) {
@@ -112,7 +113,19 @@ function generateReport(interval) // 0 = Day, 1 = Week, 2 = Month
             //         console.log("The file was saved! - " + fileName);
             //     }
             // });
-            postTextToReddit(interval, fileText);
+            // AWS.config.update({region: 'us-east-1'});
+            // var s3bucket = new AWS.S3({params: {Bucket: 'tagprostatsheet'}});
+            // s3bucket.createBucket(function() {
+            //   var params = {Key: 'myKey', Body: fileText};
+            //   s3bucket.upload(params, function(err, data) {
+            //     if (err) {
+            //       console.log("Error uploading data: ", err);
+            //     } else {
+            //       console.log("Successfully uploaded data to myBucket/myKey");
+            //     }
+            //   });
+            // });
+            //postTextToReddit(interval, fileText);
         });
     });
 }
@@ -262,8 +275,8 @@ var monthly = new CronJob('40 59 19 1 * *', function () {
     //Runs the first of every month at 7:59 PM
     var text = generateReport(FlairEnum.MONTHLY);
 });
-
-daily.start();
-weekly.start();
-monthly.start();
-console.log("Crons started");
+generateReport(FlairEnum.DAILY);
+// daily.start();
+// weekly.start();
+// monthly.start();
+// console.log("Crons started");
